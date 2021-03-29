@@ -17,9 +17,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.containers</groupId>
-			<artifactId>container-engine</artifactId>
-			<version>1.0.0</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.containers</groupId>

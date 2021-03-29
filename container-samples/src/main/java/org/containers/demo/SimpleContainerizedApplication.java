@@ -1,7 +1,5 @@
 package org.containers.demo;
 
-import java.nio.file.Path;
-import org.containers.engine.Container;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +22,6 @@ public class SimpleContainerizedApplication {
 
 	
 	public static void main(String[] args) {
-		log.info("env: {}", System.getenv());
-		Container container = new Container(Path.of(System.getenv("temp")));
-		container.setEntryPoint("org.containers:container-samples:1.0.0", "org.containers.demo.SimpleApplication");
-		container.build();
-		container.run();
-		log.info("completed");
 	}
 
 }

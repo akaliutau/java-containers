@@ -3,8 +3,10 @@ package org.containers.engine.graph;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import org.containers.model.ArtifactWrapper;
@@ -25,6 +27,8 @@ public class ConsoleDependencyGraphDumper implements DependencyVisitor {
 
 	private final Stack<NodeInfo> children = new Stack<>();
 	private final List<ArtifactWrapper> dependencies = new ArrayList<>();
+	private final Set<String> exclusions = new HashSet<>();
+	private final Set<DependencyNode> dropped = new HashSet<>();
 
 	public ConsoleDependencyGraphDumper() {
 		this(null);
@@ -37,9 +41,16 @@ public class ConsoleDependencyGraphDumper implements DependencyVisitor {
 	@Override
 	public boolean visitEnter(DependencyNode node) {
 		out.println(formatIndentation(children) + formatNode(node));
-		children.add(new NodeInfo(node.getChildren().size()));
 		Artifact a = node.getArtifact();
-		dependencies.add(new ArtifactWrapper(a));
+		String key = getFQN(a);
+		if (exclusions.contains(key)) {
+			dropped.add(node);
+			dropped.addAll(node.getChildren());
+		}
+		children.add(new NodeInfo(node.getChildren().size()));
+		if (!dropped.contains(node)) {
+			dependencies.add(new ArtifactWrapper(a));
+		}
 		return true;
 	}
 
@@ -79,9 +90,19 @@ public class ConsoleDependencyGraphDumper implements DependencyVisitor {
 
 		return buffer.toString();
 	}
+	
+	public void addExclusions(String... groupsToExclude) {
+		for (String group : groupsToExclude) {
+			exclusions.add(group);
+		}
+	}
 
 	public List<ArtifactWrapper> getDependencies() {
 		return dependencies;
+	}
+	
+	private static String getFQN(Artifact a) {
+		return String.format("%s:%s", a.getGroupId(), a.getArtifactId());
 	}
 
 }

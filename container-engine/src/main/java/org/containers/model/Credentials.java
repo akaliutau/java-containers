@@ -1,12 +1,14 @@
 package org.containers.model;
 
-public class Credentials {
+import java.io.Serializable;
 
-	private char[] username;
-	
-	private char[] password;
+public class Credentials implements Serializable {
+	private static final long serialVersionUID = 3922715196173764678L;
 
-	public Credentials(char[] username, char[] password) {
+	private String username;
+	private String password;
+
+	public Credentials(String username, String password) {
 		this.username = username;
 		this.password = password;
 	}

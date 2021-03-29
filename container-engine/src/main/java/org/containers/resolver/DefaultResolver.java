@@ -1,8 +1,9 @@
 package org.containers.resolver;
 
-import org.containers.boot.Booter;
+import java.util.List;
+
+import org.containers.boot.BooterHelper;
 import org.containers.engine.graph.ConsoleDependencyGraphDumper;
-import org.containers.model.Credentials;
 import org.containers.model.ResolverResult;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
@@ -14,37 +15,26 @@ import org.eclipse.aether.deployment.DeployRequest;
 import org.eclipse.aether.deployment.DeploymentException;
 import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.graph.DependencyNode;
-import org.eclipse.aether.repository.Authentication;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.repository.RepositoryPolicy;
 import org.eclipse.aether.resolution.DependencyRequest;
 import org.eclipse.aether.resolution.DependencyResolutionException;
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
-import org.eclipse.aether.util.repository.AuthenticationBuilder;
 
 public class DefaultResolver implements Resolver {
 	
-	private final String remoteRepository;// http://localhost:8081/nexus/content/groups/public
-
 	private final RepositorySystem repositorySystem;
 
 	private final LocalRepository localRepository;
 	
-	private Credentials creds;
-	
 	private boolean verbose = true;
 
-	public DefaultResolver(String remoteRepository, String localRepository) {
-		this.remoteRepository = remoteRepository;
-		this.repositorySystem = Booter.newRepositorySystem();
+	public DefaultResolver(String localRepository) {
+		this.repositorySystem = BooterHelper.newRepositorySystem();
 		this.localRepository = new LocalRepository(localRepository);
 	}
 	
-	public DefaultResolver(String remoteRepository, String localRepository, Credentials creds) {
-		this(remoteRepository, localRepository);
-		this.creds = creds;
-	}
 
 	/**
 	 * Builds a new session using LocalRepository as a cache
@@ -53,14 +43,14 @@ public class DefaultResolver implements Resolver {
 	 * @return RepositorySystemSession - ready to use session
 	 */
 	private RepositorySystemSession newSession() {
-		DefaultRepositorySystemSession session = Booter.newRepositorySystemSession(repositorySystem);
+		DefaultRepositorySystemSession session = BooterHelper.newRepositorySystemSession(localRepository, repositorySystem);
 		session.setLocalRepositoryManager(repositorySystem.newLocalRepositoryManager(session, localRepository));
 		session.setUpdatePolicy(RepositoryPolicy.UPDATE_POLICY_NEVER);
 		return session;
 	}
 
 	@Override
-	public ResolverResult resolve(String coords) {
+	public ResolverResult resolve(String coords, List<RemoteRepository> repositories) {
 		
 		Artifact artifact = new DefaultArtifact(coords);
 		RepositorySystemSession session = newSession();
@@ -68,9 +58,10 @@ public class DefaultResolver implements Resolver {
 
 		CollectRequest collectRequest = new CollectRequest();
 		collectRequest.setRoot(new Dependency(artifact, ""));
-		collectRequest.setRepositories(Booter.newRepositoriesWithLocal(repositorySystem, session));
+		collectRequest.setRepositories(repositories);
 
 		ConsoleDependencyGraphDumper dump = new ConsoleDependencyGraphDumper();
+		// in this demo it's too tricky to exclude containers engine's classes due to common parent
 		
 		DependencyRequest dependencyRequest = new DependencyRequest();
 		dependencyRequest.setCollectRequest(collectRequest);
@@ -93,12 +84,9 @@ public class DefaultResolver implements Resolver {
 		
 	}
 	
-	public void deploy(Artifact artifact, Artifact pom) throws DeploymentException {
+	@Override
+	public void deploy(Artifact artifact, Artifact pom, RemoteRepository nexus) throws DeploymentException {
 		RepositorySystemSession session = newSession();
-
-		
-		RemoteRepository nexus = new RemoteRepository.Builder("nexus", "default", remoteRepository)
-				.setAuthentication(getAuthentication()).build();
 
 		DeployRequest deployRequest = new DeployRequest();
 		deployRequest.addArtifact(artifact).addArtifact(pom);
@@ -107,14 +95,6 @@ public class DefaultResolver implements Resolver {
 		repositorySystem.deploy(session, deployRequest);
 	}
 	
-	private Authentication getAuthentication() {
-		return creds == null ? null : new AuthenticationBuilder().addUsername(creds.getUsername()).addPassword(creds.getPassword()).build();
-	}
-
-
-	public String getRemoteRepository() {
-		return remoteRepository;
-	}
 
 	
 }

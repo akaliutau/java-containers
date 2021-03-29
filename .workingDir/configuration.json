@@ -1,0 +1,15 @@
+{
+   "workingDir":"c:\\Users\\KALIUTAU_AV\\AppData\\Local\\Temp\\container\\",
+   "artifactFQN":"org.containers:container-samples:1.0.0",
+   "entryPoint":"org.containers.demo.SimpleApplication",
+   "repositories":[
+      {
+         "repositoryId":"LOCAL",
+         "url":"file:c:\\Users\\KALIUTAU_AV/.m2/repository"
+      },
+      {
+         "repositoryId":"CENTRAL",
+         "url":"https://repo.maven.apache.org/maven2/"
+      }
+   ]
+}

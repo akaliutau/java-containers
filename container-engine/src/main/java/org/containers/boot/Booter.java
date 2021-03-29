@@ -1,68 +1,42 @@
 package org.containers.boot;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import org.eclipse.aether.DefaultRepositorySystemSession;
-import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.RepositorySystemSession;
-import org.eclipse.aether.repository.LocalRepository;
-import org.eclipse.aether.repository.RemoteRepository;
-
-import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
-import org.containers.engine.repository.ManualRepositorySystemFactory;
-import org.containers.logger.ConsoleRepositoryListener;
-import org.containers.logger.ConsoleTransferListener;
-
-/**
- * A helper to boot the repository system and a repository system session.
- * Added mostly for demos
- * 
- * @author akaliutau
- */
+import org.containers.engine.JVMContainer;
+import org.containers.model.ContainerDescriptor;
+import org.containers.model.RepositoryDescriptor;
+import org.containers.util.JsonUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Booter {
+	private static final Logger log = LoggerFactory.getLogger(Booter.class);
 
-	public static RepositorySystem newRepositorySystem() {
-		return ManualRepositorySystemFactory.newRepositorySystem();
-		// return
-		// org.apache.maven.resolver.examples.guice.GuiceRepositorySystemFactory.newRepositorySystem();
-		// return
-		// org.apache.maven.resolver.examples.sisu.SisuRepositorySystemFactory.newRepositorySystem();
-	}
+	public static void main(String[] args) throws UnsupportedEncodingException, IOException {
+	    log.info("Argument count: " + args.length);
+	    if (args.length < 1) {
+	    	log.info("usage: java -jar java-containers.jar configuration.json");
+	    }
+	    ContainerDescriptor res = JsonUtils.fromJson(Paths.get(args[0]), ContainerDescriptor.class);
+	    Path workingDir = Paths.get(res.getWorkingDir());
+		JVMContainer container = new JVMContainer(workingDir);
+		container.setArtifactPath(res.getArtifactFQN());
+		container.setEntryPoint(res.getEntryPoint());
+		
+		// using default repositories:
+		if (res.getRepositories() != null) {
+			for (RepositoryDescriptor repo : res.getRepositories()){
+				container.addRemoteRepository(RepositoryFactory.createRepository(repo));
+			}
+		}
 
-	public static DefaultRepositorySystemSession newRepositorySystemSession(RepositorySystem system) {
-		DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
+		container.build();
+		container.run();
+		log.info("completed");
 
-		LocalRepository localRepo = new LocalRepository("target/local-repo");
-		session.setLocalRepositoryManager(system.newLocalRepositoryManager(session, localRepo));
-
-		session.setTransferListener(new ConsoleTransferListener());
-		session.setRepositoryListener(new ConsoleRepositoryListener());
-
-		// uncomment to generate dirty trees
-		// session.setDependencyGraphTransformer( null );
-
-		return session;
-	}
-
-	public static List<RemoteRepository> newRepositories(RepositorySystem system, RepositorySystemSession session) {
-		return new ArrayList<>(Collections.singletonList(newCentralRepository()));
-	}
-	
-	public static List<RemoteRepository> newRepositoriesWithLocal(RepositorySystem system, RepositorySystemSession session) {
-		return Arrays.asList(newLocalRepository(), newCentralRepository());
-	}
-
-	
-	private static RemoteRepository newLocalRepository() {
-		return new RemoteRepository.Builder("local", "default", "file:" + System.getenv("USERPROFILE") + "/.m2/repository").build();
-	}
-
-	private static RemoteRepository newCentralRepository() {
-		return new RemoteRepository.Builder("central", "default", "https://repo.maven.apache.org/maven2/").build();
 	}
 
 }
