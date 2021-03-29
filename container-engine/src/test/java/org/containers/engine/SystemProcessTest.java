@@ -12,10 +12,20 @@ public class SystemProcessTest {
 	@Test
 	public void functionalTest() {
 		Command cmd = Command.Builder.init().addArg("dir").addArg(System.getenv("tmp")).build();
-		log.debug("cmd1: {}", cmd.params());
+		log.info("command line: {}", cmd.params());
 		SystemProcess proc = new SystemProcess(Paths.get(System.getenv("tmp")), cmd);
 		proc.exec();
-		proc.printStat();
+		proc.printState();
 	}
+	
+	@Test
+	public void testWrongCommand() {
+		Command cmd = Command.Builder.init().addArg("nonexisting").addArg(System.getenv("tmp")).build();
+		log.info("command line: {}", cmd.params());
+		SystemProcess proc = new SystemProcess(Paths.get(System.getenv("tmp")), cmd);
+		proc.exec();
+		proc.printState();
+	}
+
 
 }

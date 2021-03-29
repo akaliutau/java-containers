@@ -20,7 +20,6 @@ public class GetDependencyTree {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		Logo.printLogo();
 		System.out.println("------------------------------------------------------------");
 		System.out.println(GetDependencyTree.class.getSimpleName());
 		Path targetDirectory = Paths.get("target");
@@ -31,6 +30,7 @@ public class GetDependencyTree {
 
 
 		System.out.println("arts" + res.getResolvedFiles());
+		System.out.println("arts" + res.getResolvedClassPath());
 	}
 	
 

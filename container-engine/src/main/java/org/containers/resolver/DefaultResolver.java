@@ -17,6 +17,7 @@ import org.eclipse.aether.graph.DependencyNode;
 import org.eclipse.aether.repository.Authentication;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.repository.RepositoryPolicy;
 import org.eclipse.aether.resolution.DependencyRequest;
 import org.eclipse.aether.resolution.DependencyResolutionException;
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
@@ -45,10 +46,16 @@ public class DefaultResolver implements Resolver {
 		this.creds = creds;
 	}
 
-
+	/**
+	 * Builds a new session using LocalRepository as a cache
+	 * NOTE: Aether uses local repository by default, so simply set to not use remote if this is not required (flag UPDATE_POLICY_NEVER)
+	 * 
+	 * @return RepositorySystemSession - ready to use session
+	 */
 	private RepositorySystemSession newSession() {
 		DefaultRepositorySystemSession session = Booter.newRepositorySystemSession(repositorySystem);
 		session.setLocalRepositoryManager(repositorySystem.newLocalRepositoryManager(session, localRepository));
+		session.setUpdatePolicy(RepositoryPolicy.UPDATE_POLICY_NEVER);
 		return session;
 	}
 
@@ -61,7 +68,7 @@ public class DefaultResolver implements Resolver {
 
 		CollectRequest collectRequest = new CollectRequest();
 		collectRequest.setRoot(new Dependency(artifact, ""));
-		collectRequest.setRepositories(Booter.newRepositories(repositorySystem, session));
+		collectRequest.setRepositories(Booter.newRepositoriesWithLocal(repositorySystem, session));
 
 		ConsoleDependencyGraphDumper dump = new ConsoleDependencyGraphDumper();
 		

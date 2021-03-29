@@ -10,6 +10,9 @@ public class Command {
 	List<String> args = new ArrayList<>();
 
 	public Command() {
+	}
+	
+	public void setConsole() {
 		if (isWindows) {
 			args.add("cmd.exe");
 			args.add("/c");
@@ -19,8 +22,12 @@ public class Command {
 		}
 	}
 
-	public void addArg(String s) {
-		args.add(s);
+	public void addArg(String arg) {
+		args.add(arg);
+	}
+
+	public void addArgs(List<String> args) {
+		args.addAll(args);
 	}
 
 	public List<String> params() {
@@ -39,12 +46,23 @@ public class Command {
 		}
 
 		public Builder addArg(String arg) {
-			command.addArg(arg);
+			if (!isEmpty(arg))
+				command.addArg(arg);
 			return this;
 		}
-		
+
+		public Builder addArg(List<String> args) {
+			if (args != null && !args.isEmpty())
+				command.addArgs(args);
+			return this;
+		}
+
 		public Command build() {
 			return command;
 		}
+	}
+	
+	private static boolean isEmpty(String s) {
+		return s == null || s.isEmpty();
 	}
 }

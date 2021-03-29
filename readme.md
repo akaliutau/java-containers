@@ -27,6 +27,41 @@ java -jar jar_to_run.jar -cp dependency_jar_1;dependency_jar_2;dependency_jar_3
 ```
 
 
+Running
+========
+
+Build the whole project using standard command
+
+```
+mvn clean package
+```
+As a result several jar archives with code will be build
+
+One can execute the main demo class using the following command
+
+```
+java -cp container-samples-1.0.0.jar org.containers.demo.SimpleApplication
+```
+which results in expected error (lack of necessary dependencies on classpath):
+
+```
+Exception in thread "main" java.lang.NoClassDefFoundError: org/slf4j/LoggerFactory
+        at org.containers.demo.SimpleApplication.<clinit>(SimpleApplication.java:22)
+Caused by: java.lang.ClassNotFoundException: org.slf4j.LoggerFactory
+  ...
+ (further stack trace omitted for brevity)
+```
+
+Next execute the main demo class using the following command
+
+```
+java -cp container-samples-1.0.0.jar org.containers.demo.SimpleContainerizedApplication
+```
+which results in successful execution of application inside container:
+```
+
+```
+
 Requirements
 =============
 

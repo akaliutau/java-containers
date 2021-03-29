@@ -101,17 +101,5 @@
 
 	</dependencies>
 	
-	<build>
-		<plugins>
-    		<plugin>    
-        		<artifactId>maven-compiler-plugin</artifactId>
-        		<configuration>
-            		<source>${javaVersion}</source>
-            		<target>${javaVersion}</target>
-        		</configuration>
-    		</plugin>
-		</plugins>
-	</build>
-	
 
 </project>

@@ -1,6 +1,7 @@
 package org.containers.boot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,6 +50,15 @@ public class Booter {
 
 	public static List<RemoteRepository> newRepositories(RepositorySystem system, RepositorySystemSession session) {
 		return new ArrayList<>(Collections.singletonList(newCentralRepository()));
+	}
+	
+	public static List<RemoteRepository> newRepositoriesWithLocal(RepositorySystem system, RepositorySystemSession session) {
+		return Arrays.asList(newLocalRepository(), newCentralRepository());
+	}
+
+	
+	private static RemoteRepository newLocalRepository() {
+		return new RemoteRepository.Builder("local", "default", "file:" + System.getenv("USERPROFILE") + "/.m2/repository").build();
 	}
 
 	private static RemoteRepository newCentralRepository() {

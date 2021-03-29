@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ManualRepositorySystemFactory {
-	private static final Logger LOG = LoggerFactory.getLogger(ManualRepositorySystemFactory.class);
+	private static final Logger log = LoggerFactory.getLogger(ManualRepositorySystemFactory.class);
 
 	public static RepositorySystem newRepositorySystem() {
 		/*
@@ -38,10 +38,12 @@ public class ManualRepositorySystemFactory {
 		locator.addService(TransporterFactory.class, HttpTransporterFactory.class);
 
 		locator.setErrorHandler(new DefaultServiceLocator.ErrorHandler() {
+			
 			@Override
 			public void serviceCreationFailed(Class<?> type, Class<?> impl, Throwable exception) {
-				LOG.error("Service creation failed for {} with implementation {}", type, impl, exception);
+				log.error("Service creation failed for {} with implementation {}", type, impl, exception);
 			}
+			
 		});
 
 		return locator.getService(RepositorySystem.class);

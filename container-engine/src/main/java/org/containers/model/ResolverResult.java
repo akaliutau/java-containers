@@ -43,6 +43,10 @@ public class ResolverResult {
 		return exceptions;
 	}
 	
+	public String getFirstError() {
+		return exceptions.isEmpty() ? "N/A" : exceptions.get(0).getMessage();
+	}
+	
 	public void addException(Exception e){
 		this.exceptions.add(e);
 	}
