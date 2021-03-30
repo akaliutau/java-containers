@@ -3,6 +3,12 @@ package org.containers.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implements Command pattern
+ *  
+ * @author akaliutau
+ *
+ */
 public class Command {
 
 	private final boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");

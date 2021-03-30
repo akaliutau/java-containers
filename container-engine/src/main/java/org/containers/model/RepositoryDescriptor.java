@@ -2,7 +2,7 @@ package org.containers.model;
 
 import java.io.Serializable;
 
-import org.containers.boot.RepositoryId;
+import org.containers.repository.RepositoryId;
 
 public class RepositoryDescriptor implements Serializable {
 

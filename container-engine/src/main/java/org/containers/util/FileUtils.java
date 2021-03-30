@@ -1,5 +1,6 @@
 package org.containers.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -13,6 +14,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Simple utility class
  * 
@@ -20,7 +24,9 @@ import java.util.stream.Collectors;
  *
  */
 public class FileUtils {
-	
+	private static final Logger log = LoggerFactory.getLogger(FileUtils.class);
+
+	private final static boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
 	public static final String SHA1_EXT = ".sha1";
 	
 	/**
@@ -62,6 +68,14 @@ public class FileUtils {
 		return Path.of(p.toString().replace(SHA1_EXT, ""));
 	}
 	
+	public static String getM2Directory() {
+		String homeDir = isWindows ? System.getenv("userprofile") : System.getProperty("user.home");
+		String m2Path = homeDir + File.separator + ".m2" + File.separator + "repository";
+		log.info("trying to figure out .m2 directory location");
+		log.info("using default location {}, exists: {}", m2Path, exists(m2Path));
+	    return "file:" + m2Path;
+	}
+	
 	public static Path getCurrentWorkingDirectory() {
 	    Path currentRelativePath = Paths.get("");
 	    return Paths.get(currentRelativePath.toAbsolutePath().toString());
@@ -70,5 +84,15 @@ public class FileUtils {
 	public static Path getDefaultWorkingDirectory() {
 	    Path currentRelativePath = Paths.get("");
 	    return Paths.get(currentRelativePath.toAbsolutePath().toString(), "container");
+	}
+	
+	/**
+	 * Used to validate path (existence)
+	 * @param path
+	 * @return
+	 */
+	public static boolean exists(String path) {
+		File f = new File(path);
+		return f.exists();
 	}
 }

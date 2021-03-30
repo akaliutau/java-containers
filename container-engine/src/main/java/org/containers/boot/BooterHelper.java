@@ -13,6 +13,8 @@ import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.containers.engine.repository.ManualRepositorySystemFactory;
 import org.containers.logger.ConsoleRepositoryListener;
 import org.containers.logger.ConsoleTransferListener;
+import org.containers.repository.RepositoryFactory;
+import org.containers.repository.RepositoryId;
 
 /**
  * A helper to boot the repository system and a repository system session.

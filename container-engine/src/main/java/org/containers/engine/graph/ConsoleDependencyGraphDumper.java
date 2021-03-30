@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.containers.model.ArtifactWrapper;
 import org.containers.model.NodeInfo;
@@ -27,8 +29,9 @@ public class ConsoleDependencyGraphDumper implements DependencyVisitor {
 
 	private final Stack<NodeInfo> children = new Stack<>();
 	private final List<ArtifactWrapper> dependencies = new ArrayList<>();
-	private final Set<String> exclusions = new HashSet<>();
+	private final Set<Pattern> exclusions = new HashSet<>();
 	private final Set<DependencyNode> dropped = new HashSet<>();
+	private boolean dropChildren = false;
 
 	public ConsoleDependencyGraphDumper() {
 		this(null);
@@ -43,9 +46,11 @@ public class ConsoleDependencyGraphDumper implements DependencyVisitor {
 		out.println(formatIndentation(children) + formatNode(node));
 		Artifact a = node.getArtifact();
 		String key = getFQN(a);
-		if (exclusions.contains(key)) {
+		if (match(key)) {
 			dropped.add(node);
-			dropped.addAll(node.getChildren());
+			if (dropChildren) {
+				dropped.addAll(node.getChildren());
+			}
 		}
 		children.add(new NodeInfo(node.getChildren().size()));
 		if (!dropped.contains(node)) {
@@ -93,7 +98,7 @@ public class ConsoleDependencyGraphDumper implements DependencyVisitor {
 	
 	public void addExclusions(String... groupsToExclude) {
 		for (String group : groupsToExclude) {
-			exclusions.add(group);
+			exclusions.add(Pattern.compile(group));
 		}
 	}
 
@@ -103,6 +108,16 @@ public class ConsoleDependencyGraphDumper implements DependencyVisitor {
 	
 	private static String getFQN(Artifact a) {
 		return String.format("%s:%s", a.getGroupId(), a.getArtifactId());
+	}
+	
+	private boolean match(String fqn) {
+		for (Pattern pattern : exclusions) {
+			Matcher m = pattern.matcher(fqn);
+			if (m.matches()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

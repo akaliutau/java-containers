@@ -13,6 +13,11 @@ import org.eclipse.aether.repository.RemoteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation of container for java applications
+ * @author akaliutau
+ *
+ */
 public class JVMContainer implements Container {
 	private static final Logger log = LoggerFactory.getLogger(JVMContainer.class);
 	

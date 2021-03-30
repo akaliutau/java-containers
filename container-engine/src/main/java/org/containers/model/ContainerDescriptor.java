@@ -3,6 +3,11 @@ package org.containers.model;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * A POJO class describing essential properties of Container
+ * @author akaliutau
+ *
+ */
 public class ContainerDescriptor implements Serializable {
 	private static final long serialVersionUID = -8592308168402268289L;
 	

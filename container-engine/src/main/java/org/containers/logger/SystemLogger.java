@@ -2,6 +2,13 @@ package org.containers.logger;
 
 import java.io.PrintStream;
 
+/**
+ * A rudimentary system logger using only System.out
+ * 
+ * @author akaliutau
+ *
+ * @param <T>
+ */
 public class SystemLogger<T> implements ConsoleLogger<T> {
 
 	@Override

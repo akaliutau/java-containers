@@ -66,5 +66,13 @@ public class FileUtilsTest {
 		Path path = FileUtils.getCurrentWorkingDirectory();
 		assertNotNull(path);
 	}
+	
+	@Test
+	public void testGetm2Dir() {
+		String path = FileUtils.getM2Directory();
+		assertNotNull(path);
+		System.out.println(path);
+	}
+
 
 }

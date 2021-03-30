@@ -9,9 +9,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.containers.boot.RepositoryId;
 import org.containers.model.ContainerDescriptor;
 import org.containers.model.RepositoryDescriptor;
+import org.containers.repository.RepositoryId;
 import org.containers.util.JsonUtils;
 import org.junit.Test;
 import org.slf4j.Logger;

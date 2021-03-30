@@ -3,8 +3,7 @@
    "entryPoint" : "org.containers.demo.SimpleApplication",
    "repositories" : [
       {
-         "repositoryId" : "LOCAL",
-         "url" : "file:c:\\Users\\KALIUTAU_AV/.m2/repository"
+         "repositoryId" : "LOCAL"
       },
       {
          "repositoryId" : "CENTRAL",

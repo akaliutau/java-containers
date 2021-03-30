@@ -7,6 +7,11 @@ import java.io.InputStreamReader;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+/**
+ * Log-tracing functionality to be run in separate threads
+ * @author akaliutau
+ *
+ */
 public class StreamRunner implements Runnable {
 	private InputStream inputStream;
 	private Consumer<String> consumer;

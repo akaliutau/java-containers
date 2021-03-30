@@ -22,6 +22,12 @@ import org.eclipse.aether.resolution.DependencyRequest;
 import org.eclipse.aether.resolution.DependencyResolutionException;
 import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
 
+/**
+ * Default resolver for maven repositories
+ * Mostly built on the basis of Eclipse Aether project
+ * @author akaliutau
+ *
+ */
 public class DefaultResolver implements Resolver {
 	
 	private final RepositorySystem repositorySystem;
