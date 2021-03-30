@@ -141,6 +141,13 @@ What happend here?
  
 
 In logs one can find that engine correctly detected and built the dependency tree for artifact <code> org.containers:container-samples:1.0.0</code> specified in configuration:
+```
+org.containers:container-samples:jar:1.0.0
++- ch.qos.logback:logback-classic:jar:1.2.3 [compile]
+|  +- ch.qos.logback:logback-core:jar:1.2.3 [compile]
+|  \- org.slf4j:slf4j-api:jar:1.7.25 [compile]
+\- org.containers:container-samples-deps:jar:1.0.0 [compile]
+```
 
 The full tree is a bit longer; extra dependencies can be dropped using dropArtifacts field in configuration
 
