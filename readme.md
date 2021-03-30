@@ -125,6 +125,7 @@ org.containers:container-samples:jar:1.0.0
 
 10:26:35.733 [main] INFO  org.containers.engine.JVMContainer - command line: [java, -cp, <classpath jars>, org.containers.demo.SimpleApplication]
 10:26:35.735 [main] INFO  org.containers.engine.JVMContainer - container 8eeae794-0db9-4801-b0fd-2d65bafbc428 started
+10:26:35.766 [pool-2-thread-1] INFO  org.containers.engine.SystemProcess - 10:26:35.735 [main] INFO org.containers.demo.SimpleApplication - this is a demo application. Uses dependencies specified in module container-samples-deps
 10:26:35.909 [pool-2-thread-1] INFO  org.containers.engine.SystemProcess - 10:26:35.905 [main] INFO org.containers.demo.SimpleApplication - 2 x 3 = 6.0
 10:26:35.922 [main] INFO  org.containers.engine.JVMContainer - container 8eeae794-0db9-4801-b0fd-2d65bafbc428 finished
 10:26:35.923 [main] INFO  org.containers.engine.SystemProcess - info {duration= 0.1770 sec, exit code=0, process=java -cp <jars> org.containers.demo.SimpleApplication, error message=null, pid=6084, started=Tue Mar 30 10:26:35 MSK 2021, finished=Tue Mar 30 10:26:35 MSK 2021}
@@ -135,7 +136,7 @@ What happend here?
 
 1) First, the java container was instantiated
 2) Container engine used pom for <code>org.containers:container-samples:1.0.0</code> artifact to figure out all dependencies
-3) Container downloaded all dependencies (in this case the local .m2 repository was used, so the the spin up time was really small)
+3) Container downloaded all dependencies into the local working repository, by default it creates a directory /local-repo. note in this case the local .m2 repository was used, so the the spin up time was really small 
 4) Code in jar was executed with all detected dependencies which have been passed to the classpath
 
  
