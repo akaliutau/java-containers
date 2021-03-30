@@ -25,6 +25,8 @@ public class JVMContainer implements Container {
 	private final Path workingDir;
 	private SystemProcess process;
 	private List<RemoteRepository> repositories;
+	private List<String> exclusions;
+	
 	
 	private String jarPath;
 	private String className;
@@ -44,6 +46,7 @@ public class JVMContainer implements Container {
 		String dir = workingDir + File.separator + "local-repo";
 		log.info("building container {} in {}", cid, dir);
 		DefaultResolver resolver = new DefaultResolver(dir);
+		resolver.setExclusions(exclusions);
 		ResolverResult res = resolver.resolve(jarPath, repositories);
 		classPath = res.getResolvedClassPath();
 		if (!res.success()) {
@@ -104,6 +107,10 @@ public class JVMContainer implements Container {
 			throw new ContainerException("set at least one repository (remote or local)");
 		}
 
+	}
+
+	public void setExclusions(List<String> exclusions) {
+		this.exclusions = exclusions;
 	}
 
 }

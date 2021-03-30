@@ -131,10 +131,18 @@ org.containers:container-samples:jar:1.0.0
 10:26:35.923 [main] INFO  org.containers.boot.Booter - completed
 
 ```
+What happend here? 
+
+1) First, the java container was instantiated
+2) Container engine used pom for <code>org.containers:container-samples:1.0.0</code> artifact to figure out all dependencies
+3) Container downloaded all dependencies (in this case the local .m2 repository was used, so the the spin up time was really small)
+4) Code in jar was executed with all detected dependencies which have been passed to the classpath
+
+ 
 
 In logs one can find that engine correctly detected and built the dependency tree for artifact <code> org.containers:container-samples:1.0.0</code> specified in configuration:
 
-The full tree is a bit longer; extra dependencies can be dropped using drop field in configuration
+The full tree is a bit longer; extra dependencies can be dropped using dropArtifacts field in configuration
 
 ```
 org.containers:container-samples:jar:1.0.0

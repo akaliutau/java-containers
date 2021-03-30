@@ -15,6 +15,7 @@ public class ContainerDescriptor implements Serializable {
 	private String artifactFQN;
 	private String entryPoint;
 	private List<RepositoryDescriptor> repositories;
+	private List<String> dropArtifacts;
 	
 
 	public ContainerDescriptor() {
@@ -45,6 +46,14 @@ public class ContainerDescriptor implements Serializable {
 
 	public void setRepositories(List<RepositoryDescriptor> repositories) {
 		this.repositories = repositories;
+	}
+
+	public List<String> getDropArtifacts() {
+		return dropArtifacts;
+	}
+
+	public void setDropArtifacts(List<String> dropArtifacts) {
+		this.dropArtifacts = dropArtifacts;
 	}
 
 	

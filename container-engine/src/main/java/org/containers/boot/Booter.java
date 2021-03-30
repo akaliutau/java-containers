@@ -39,6 +39,7 @@ public class Booter {
 		JVMContainer container = new JVMContainer(workingDir);
 		container.setArtifactPath(res.getArtifactFQN());
 		container.setEntryPoint(res.getEntryPoint());
+		container.setExclusions(res.getDropArtifacts());
 		
 		// using default repositories:
 		if (res.getRepositories() != null) {

@@ -101,6 +101,16 @@ public class ConsoleDependencyGraphDumper implements DependencyVisitor {
 			exclusions.add(Pattern.compile(group));
 		}
 	}
+	
+	public void addExclusions(List<String> groupsToExclude) {
+		if (groupsToExclude == null) {
+			return;
+		}
+		for (String group : groupsToExclude) {
+			exclusions.add(Pattern.compile(group));
+		}
+	}
+
 
 	public List<ArtifactWrapper> getDependencies() {
 		return dependencies;

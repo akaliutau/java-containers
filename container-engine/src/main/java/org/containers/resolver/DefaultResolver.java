@@ -34,6 +34,8 @@ public class DefaultResolver implements Resolver {
 
 	private final LocalRepository localRepository;
 	
+	private List<String> exclusions;
+	
 	private boolean verbose = true;
 
 	public DefaultResolver(String localRepository) {
@@ -68,6 +70,7 @@ public class DefaultResolver implements Resolver {
 
 		ConsoleDependencyGraphDumper dump = new ConsoleDependencyGraphDumper();
 		// in this demo it's too tricky to exclude containers engine's classes due to common parent
+		dump.addExclusions(exclusions);
 		
 		DependencyRequest dependencyRequest = new DependencyRequest();
 		dependencyRequest.setCollectRequest(collectRequest);
@@ -99,6 +102,14 @@ public class DefaultResolver implements Resolver {
 		deployRequest.setRepository(nexus);
 
 		repositorySystem.deploy(session, deployRequest);
+	}
+
+	public void setExclusions(List<String> exclusions) {
+		this.exclusions = exclusions;
+	}
+
+	public void setVerbose(boolean verbose) {
+		this.verbose = verbose;
 	}
 	
 
