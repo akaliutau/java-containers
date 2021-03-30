@@ -6,6 +6,7 @@
 
 .idea
 target
+local-repo
 *.iml
 *.log
 *.erlang

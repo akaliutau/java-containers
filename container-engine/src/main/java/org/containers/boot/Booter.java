@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import org.containers.engine.JVMContainer;
 import org.containers.model.ContainerDescriptor;
 import org.containers.model.RepositoryDescriptor;
+import org.containers.util.FileUtils;
 import org.containers.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +18,13 @@ public class Booter {
 
 	public static void main(String[] args) throws UnsupportedEncodingException, IOException {
 	    log.info("Argument count: " + args.length);
+	    
 	    if (args.length < 1) {
 	    	log.info("usage: java -jar java-containers.jar configuration.json");
 	    }
+	    log.info("loading configuration from {}", args[0]);
 	    ContainerDescriptor res = JsonUtils.fromJson(Paths.get(args[0]), ContainerDescriptor.class);
-	    Path workingDir = Paths.get(res.getWorkingDir());
+	    Path workingDir = res.getWorkingDir() == null ? FileUtils.getCurrentWorkingDirectory() : Paths.get(res.getWorkingDir());
 		JVMContainer container = new JVMContainer(workingDir);
 		container.setArtifactPath(res.getArtifactFQN());
 		container.setEntryPoint(res.getEntryPoint());

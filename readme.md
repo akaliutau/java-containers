@@ -33,9 +33,12 @@ Running
 Build the whole project using standard command
 
 ```
-mvn clean package
+mvn clean install package  -DcreateChecksum=true
 ```
-As a result several jar archives with code will be build
+As a result several jar archives with code will be build and installed into local .m2 repository
+
+Note the flag createChecksum added into the command - this is needed in order to generate sha1 sums for artifacts (one can omit this, but this will lead to non-fatal warnings like org.eclipse.aether.transfer.ChecksumFailureException: Checksum validation failed, no checksums available)
+
 
 One can execute the main demo class using the following command
 
@@ -52,7 +55,7 @@ Caused by: java.lang.ClassNotFoundException: org.slf4j.LoggerFactory
  (further stack trace omitted for brevity)
 ```
 
-In order to run application inside container the container configuration json is needed:
+In order to run application inside container the container configuration json is needed (a sample can be found in .workingDir directory):
 
 ```
 {
@@ -73,23 +76,78 @@ In order to run application inside container the container configuration json is
 ```
 Note, that resolver tries to find the artifact in the local repository first (default policy is set to "Never update locally cached data")
 Note also that there possibly will be need to update permissions for .m2 repository
+Not all properties are mandatory. For example, one can omit workingDir property which results in using default settings (see model class ContainerDescriptor for details)
+
 
 Next execute the main demo class using the following command
 
 ```
 java -jar ./container-engine/target/container-engine-1.0.0-shaded.jar <path to configuration.json>
 ```
+
+For example one can use the configuration from .workingDir:
+
+```
+java -jar ./container-engine/target/container-engine-1.0.0-shaded.jar .workingDir/configuration.json
+```
+
 which results in successful execution of application inside container:
 
 ```
 (output truncated)
 
-17:32:19.911 [pool-1-thread-1] INFO  org.containers.engine.SystemProcess -
-17:32:19.911 [pool-1-thread-1] INFO  org.containers.engine.SystemProcess - 17:32:19.901 [main] INFO  o.containers.demo.SimpleApplication - 2 x 3 = 6.0
-17:32:19.934 [main] INFO  org.containers.engine.JVMContainer - container b1c960c7-4e1b-4ccd-bb69-5cc69463782a finished
-18:00:10.594 [main] INFO  org.containers.engine.SystemProcess - info {duration= 0.2900 sec, exit code=0, process=java -cp <jar paths> org.containers.demo.SimpleApplication, error message=null, pid=4156, started=Mon Mar 29 18:00:10 MSK 2021, finished=Mon Mar 29 18:00:10 MSK 2021}
-18:00:10.601 [main] INFO  org.containers.boot.Booter - completed
+org.containers:container-samples:jar:1.0.0
++- ch.qos.logback:logback-classic:jar:1.2.3 [compile]
+|  +- ch.qos.logback:logback-core:jar:1.2.3 [compile]
+|  \- org.slf4j:slf4j-api:jar:1.7.25 [compile]
+\- org.containers:container-samples-deps:jar:1.0.0 [compile]
 
+10:26:35.733 [main] INFO  org.containers.engine.JVMContainer - command line: [java, -cp, <classpath jars>, org.containers.demo.SimpleApplication]
+10:26:35.735 [main] INFO  org.containers.engine.JVMContainer - container 8eeae794-0db9-4801-b0fd-2d65bafbc428 started
+10:26:35.909 [pool-2-thread-1] INFO  org.containers.engine.SystemProcess - 10:26:35.905 [main] INFO org.containers.demo.SimpleApplication - 2 x 3 = 6.0
+10:26:35.922 [main] INFO  org.containers.engine.JVMContainer - container 8eeae794-0db9-4801-b0fd-2d65bafbc428 finished
+10:26:35.923 [main] INFO  org.containers.engine.SystemProcess - info {duration= 0.1770 sec, exit code=0, process=java -cp <jars> org.containers.demo.SimpleApplication, error message=null, pid=6084, started=Tue Mar 30 10:26:35 MSK 2021, finished=Tue Mar 30 10:26:35 MSK 2021}
+10:26:35.923 [main] INFO  org.containers.boot.Booter - completed
+
+```
+
+In logs one can find that engine correctly detected and built the dependency tree for artifact <code> org.containers:container-samples:1.0.0</code> specified in configuration:
+
+The full tree is a bit longer; extra dependencies can be dropped using drop field in configuration
+
+```
+org.containers:container-samples:jar:1.0.0
++- org.containers:container-engine:jar:1.0.0 [compile]
+|  +- org.apache.maven.resolver:maven-resolver:pom:1.6.2 [compile]
+|  +- org.apache.maven.resolver:maven-resolver-api:jar:1.6.2 [compile]
+|  +- org.apache.maven.resolver:maven-resolver-spi:jar:1.6.2 [compile]
+|  +- org.apache.maven.resolver:maven-resolver-util:jar:1.6.2 [compile]
+|  +- org.apache.maven.resolver:maven-resolver-impl:jar:1.6.2 [compile]
+|  |  +- org.apache.commons:commons-lang3:jar:3.8.1 [compile]
+|  |  \- org.slf4j:slf4j-api:jar:1.7.30 [compile]
+|  +- org.apache.maven.resolver:maven-resolver-connector-basic:jar:1.6.2 [compile]
+|  +- org.apache.maven.resolver:maven-resolver-transport-classpath:jar:1.6.2 [compile]
+|  +- org.apache.maven.resolver:maven-resolver-transport-file:jar:1.6.2 [compile]
+|  +- org.apache.maven.resolver:maven-resolver-transport-http:jar:1.6.2 [compile]
+|  |  +- org.apache.httpcomponents:httpclient:jar:4.5.12 [compile]
+|  |  |  \- commons-codec:commons-codec:jar:1.11 [compile]
+|  |  +- org.apache.httpcomponents:httpcore:jar:4.4.13 [compile]
+|  |  \- org.slf4j:jcl-over-slf4j:jar:1.7.30 [runtime]
+|  +- org.apache.maven:maven-resolver-provider:jar:3.6.0 [compile]
+|  |  +- org.apache.maven:maven-model:jar:3.6.0 [compile]
+|  |  +- org.apache.maven:maven-repository-metadata:jar:3.6.0 [compile]
+|  |  +- org.codehaus.plexus:plexus-utils:jar:3.1.0 [compile]
+|  |  \- javax.inject:javax.inject:jar:1 [compile]
+|  +- org.apache.maven:maven-model-builder:jar:3.6.0 [compile]
+|  |  +- org.codehaus.plexus:plexus-interpolation:jar:1.25 [compile]
+|  |  +- org.codehaus.plexus:plexus-component-annotations:jar:1.7.1 [compile]
+|  |  +- org.apache.maven:maven-artifact:jar:3.6.0 [compile]
+|  |  \- org.apache.maven:maven-builder-support:jar:3.6.0 [compile]
+|  +- org.apache.maven.resolver:maven-resolver-transport-wagon:jar:1.6.2 [compile]
+|  |  \- org.apache.maven.wagon:wagon-provider-api:jar:3.4.0 [compile]
+|  \- ch.qos.logback:logback-classic:jar:1.2.3 [compile]
+|     \- ch.qos.logback:logback-core:jar:1.2.3 [compile]
+\- org.containers:container-samples-deps:jar:1.0.0 [compile]
 ```
 
 Requirements

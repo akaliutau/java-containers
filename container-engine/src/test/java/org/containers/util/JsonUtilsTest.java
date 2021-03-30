@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.containers.boot.RepositoryId;
-import org.containers.engine.CommandTest;
 import org.containers.model.ContainerDescriptor;
 import org.containers.model.RepositoryDescriptor;
 import org.containers.util.JsonUtils;

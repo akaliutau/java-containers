@@ -3,11 +3,13 @@ package org.containers.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.junit.Test;
 
@@ -54,8 +56,15 @@ public class FileUtilsTest {
 	}
 
 	@Test
-	public void testFileCopying() {
-
+	public void testNullWorkingDir() {
+		Path path = Paths.get("");
+		assertNotNull(path);
+	}
+	
+	@Test
+	public void testGetCurrWorkingDir() {
+		Path path = FileUtils.getCurrentWorkingDirectory();
+		assertNotNull(path);
 	}
 
 }

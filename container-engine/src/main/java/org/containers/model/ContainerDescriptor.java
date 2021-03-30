@@ -16,7 +16,7 @@ public class ContainerDescriptor implements Serializable {
 	}
 
 	public String getWorkingDir() {
-		return workingDir;
+		return workingDir;// null if current directory is used
 	}
 	public void setWorkingDir(String workingDir) {
 		this.workingDir = workingDir;

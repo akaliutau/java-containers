@@ -5,6 +5,7 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,5 +60,15 @@ public class FileUtils {
 	
 	public static Path stripMame(Path p) {
 		return Path.of(p.toString().replace(SHA1_EXT, ""));
+	}
+	
+	public static Path getCurrentWorkingDirectory() {
+	    Path currentRelativePath = Paths.get("");
+	    return Paths.get(currentRelativePath.toAbsolutePath().toString());
+	}
+	
+	public static Path getDefaultWorkingDirectory() {
+	    Path currentRelativePath = Paths.get("");
+	    return Paths.get(currentRelativePath.toAbsolutePath().toString(), "container");
 	}
 }

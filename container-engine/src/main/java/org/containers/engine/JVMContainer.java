@@ -49,7 +49,6 @@ public class JVMContainer implements Container {
 	public void setArtifactPath(String jarPath) {
 		this.jarPath = jarPath;
 	}
-
 	
 	public void setEntryPoint(String className) {
 		this.className = className;
