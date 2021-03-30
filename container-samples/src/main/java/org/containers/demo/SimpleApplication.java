@@ -24,6 +24,7 @@ public class SimpleApplication {
 	
 	public static void main(String[] args) {
 		double product = MathUtils.multiply(2.0, 3.0);
+		log.info("this is a demo application. Uses dependencies specified in module container-samples-deps");
 		log.info("2 x 3 = {}", product);
 	}
 

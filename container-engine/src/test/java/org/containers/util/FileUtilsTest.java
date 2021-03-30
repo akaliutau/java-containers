@@ -71,8 +71,14 @@ public class FileUtilsTest {
 	public void testGetm2Dir() {
 		String path = FileUtils.getM2Directory();
 		assertNotNull(path);
-		System.out.println(path);
 	}
+	
+	@Test
+	public void testUserHomeDir() {
+		String path = System.getProperty("user.home");
+		assertNotNull(path);
+	}
+
 
 
 }
