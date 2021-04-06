@@ -8,12 +8,13 @@ This project was started having in mind  slightly different aims.
 
 I was inspired by layered docker images technology (https://dzone.com/articles/docker-layers-explained) used to make the distribution and running docker containers maximum fast and efficient, and I decided to apply similar approach but for Java application.
 
+This technology has many potential applications. For example, the decreasing of jar size could shorten the spin up time for processes running in distributed system (such as Spark or Storm to name a few), in implementing engine for serverless platform and so on.
 
 Overview
 =========
 
 The container could be bidden to the local maven repository, to Nexus or to the central maven repository.
-In either way the necessary artifacts are collected in local directory
+In either way the necessary artifacts are collected in local directory (by default this is a local-repo folder created in working directory)
 
 Before executing jar in container, the following flow of system checks and operations is performed
 
@@ -29,6 +30,8 @@ The typical command which container uses to run jar has the following look:
 ```
 java -cp jar_to_run.jar;dependency_jar_1;dependency_jar_2;dependency_jar_3 main.class.name
 ```
+
+Currently only one entry point is supported - the static void main(String[] args) method in jar (the standard entry point for java apps)
 
 This project contains three modules. 
 
