@@ -1,6 +1,6 @@
 {
-   "artifactFQN" : "org.containers:container-samples:1.0.0",
-   "entryPoint" : "org.containers.demo.SimpleApplication",
+   "artifactFQN" : "containers:container-samples:1.0.0",
+   "entryPoint" : "containers.demo.SimpleApplication",
    "repositories" : [
       {
          "repositoryId" : "LOCAL"

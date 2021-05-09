@@ -8,7 +8,7 @@
         </layout>
     </appender>
 
-    <logger name="org.containers" level="info" additivity="false">
+    <logger name="containers" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
 

@@ -6,6 +6,9 @@ import static org.junit.Assert.assertTrue;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.junit.Test;
 
+import containers.repository.RepositoryFactory;
+import containers.repository.RepositoryId;
+
 public class RepositoryFactoryTest {
 
 	@Test

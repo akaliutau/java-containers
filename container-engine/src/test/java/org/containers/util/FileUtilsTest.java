@@ -13,6 +13,8 @@ import java.nio.file.Paths;
 
 import org.junit.Test;
 
+import containers.util.FileUtils;
+
 public class FileUtilsTest {
 
 	@Test

@@ -65,7 +65,7 @@ Note the flag createChecksum added into the command - this is needed in order to
 One can execute the main demo class using the following command
 
 ```
-java -cp container-samples-1.0.0.jar org.containers.demo.SimpleApplication
+java -cp ./container-samples/target/container-samples-1.0.0.jar containers.demo.SimpleApplication
 ```
 which results in expected error (lack of necessary dependencies on classpath):
 
@@ -82,8 +82,8 @@ In order to run application inside container the container configuration json is
 ```
 {
    "workingDir":"path_to_working_directory",                  <--  can be omitted; defaulting in current directory
-   "artifactFQN":"org.containers:container-samples:1.0.0",
-   "entryPoint":"org.containers.demo.SimpleApplication",
+   "artifactFQN":"containers:container-samples:1.0.0",
+   "entryPoint":"containers.demo.SimpleApplication",
    "repositories":[
       {
          "repositoryId":"LOCAL",

@@ -6,6 +6,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import containers.engine.Command;
+import containers.engine.SystemProcess;
+
 public class SystemProcessTest {
 	private static final Logger log = LoggerFactory.getLogger(SystemProcessTest.class);
 
