@@ -71,7 +71,7 @@ which results in expected error (lack of necessary dependencies on classpath):
 
 ```
 Exception in thread "main" java.lang.NoClassDefFoundError: org/slf4j/LoggerFactory
-        at org.containers.demo.SimpleApplication.<clinit>(SimpleApplication.java:22)
+        at containers.demo.SimpleApplication.<clinit>(SimpleApplication.java:22)
 Caused by: java.lang.ClassNotFoundException: org.slf4j.LoggerFactory
   ...
  (further stack trace omitted for brevity)
@@ -120,44 +120,44 @@ which results in successful execution of application inside container:
 ```
 (output truncated)
 
-org.containers:container-samples:jar:1.0.0
+containers:container-samples:jar:1.0.0
 +- ch.qos.logback:logback-classic:jar:1.2.3 [compile]
 |  +- ch.qos.logback:logback-core:jar:1.2.3 [compile]
 |  \- org.slf4j:slf4j-api:jar:1.7.25 [compile]
-\- org.containers:container-samples-deps:jar:1.0.0 [compile]
+\- containers:container-samples-deps:jar:1.0.0 [compile]
 
-10:26:35.733 [main] INFO  org.containers.engine.JVMContainer - command line: [java, -cp, <classpath jars>, org.containers.demo.SimpleApplication]
-10:26:35.735 [main] INFO  org.containers.engine.JVMContainer - container 8eeae794-0db9-4801-b0fd-2d65bafbc428 started
-10:26:35.766 [pool-2-thread-1] INFO  org.containers.engine.SystemProcess - 10:26:35.735 [main] INFO org.containers.demo.SimpleApplication - this is a demo application. Uses dependencies specified in module container-samples-deps
-10:26:35.909 [pool-2-thread-1] INFO  org.containers.engine.SystemProcess - 10:26:35.905 [main] INFO org.containers.demo.SimpleApplication - 2 x 3 = 6.0
-10:26:35.922 [main] INFO  org.containers.engine.JVMContainer - container 8eeae794-0db9-4801-b0fd-2d65bafbc428 finished
-10:26:35.923 [main] INFO  org.containers.engine.SystemProcess - info {duration= 0.1770 sec, exit code=0, process=java -cp <jars> org.containers.demo.SimpleApplication, error message=null, pid=6084, started=Tue Mar 30 10:26:35 MSK 2021, finished=Tue Mar 30 10:26:35 MSK 2021}
-10:26:35.923 [main] INFO  org.containers.boot.Booter - completed
+10:26:35.733 [main] INFO  containers.engine.JVMContainer - command line: [java, -cp, <classpath jars>, containers.demo.SimpleApplication]
+10:26:35.735 [main] INFO  containers.engine.JVMContainer - container 8eeae794-0db9-4801-b0fd-2d65bafbc428 started
+10:26:35.766 [pool-2-thread-1] INFO  containers.engine.SystemProcess - 10:26:35.735 [main] INFO containers.demo.SimpleApplication - this is a demo application. Uses dependencies specified in module container-samples-deps
+10:26:35.909 [pool-2-thread-1] INFO  containers.engine.SystemProcess - 10:26:35.905 [main] INFO containers.demo.SimpleApplication - 2 x 3 = 6.0
+10:26:35.922 [main] INFO  containers.engine.JVMContainer - container 8eeae794-0db9-4801-b0fd-2d65bafbc428 finished
+10:26:35.923 [main] INFO  containers.engine.SystemProcess - info {duration= 0.1770 sec, exit code=0, process=java -cp <jars> containers.demo.SimpleApplication, error message=null, pid=6084, started=Tue Mar 30 10:26:35 MSK 2021, finished=Tue Mar 30 10:26:35 MSK 2021}
+10:26:35.923 [main] INFO  containers.boot.Booter - completed
 
 ```
 What happend here? 
 
 1) First, the java container was instantiated
-2) Container engine used pom for <code>org.containers:container-samples:1.0.0</code> artifact to figure out all dependencies
+2) Container engine used pom for <code>containers:container-samples:1.0.0</code> artifact to figure out all dependencies
 3) Container downloaded all dependencies into the local working repository, by default it creates a directory /local-repo. note in this case the local .m2 repository was used, so the the spin up time was really small 
 4) Code in jar was executed with all detected dependencies which have been passed to the classpath
 
  
 
-In logs one can find that engine correctly detected and built the dependency tree for artifact <code> org.containers:container-samples:1.0.0</code> specified in configuration:
+In logs one can find that engine correctly detected and built the dependency tree for artifact <code> containers:container-samples:1.0.0</code> specified in configuration:
 ```
-org.containers:container-samples:jar:1.0.0
+containers:container-samples:jar:1.0.0
 +- ch.qos.logback:logback-classic:jar:1.2.3 [compile]
 |  +- ch.qos.logback:logback-core:jar:1.2.3 [compile]
 |  \- org.slf4j:slf4j-api:jar:1.7.25 [compile]
-\- org.containers:container-samples-deps:jar:1.0.0 [compile]
+\- containers:container-samples-deps:jar:1.0.0 [compile]
 ```
 
 The full tree is a bit longer; extra dependencies can be dropped using dropArtifacts field in configuration
 
 ```
-org.containers:container-samples:jar:1.0.0
-+- org.containers:container-engine:jar:1.0.0 [compile]
+containers:container-samples:jar:1.0.0
++- containers:container-engine:jar:1.0.0 [compile]
 |  +- org.apache.maven.resolver:maven-resolver:pom:1.6.2 [compile]
 |  +- org.apache.maven.resolver:maven-resolver-api:jar:1.6.2 [compile]
 |  +- org.apache.maven.resolver:maven-resolver-spi:jar:1.6.2 [compile]
@@ -187,7 +187,7 @@ org.containers:container-samples:jar:1.0.0
 |  |  \- org.apache.maven.wagon:wagon-provider-api:jar:3.4.0 [compile]
 |  \- ch.qos.logback:logback-classic:jar:1.2.3 [compile]
 |     \- ch.qos.logback:logback-core:jar:1.2.3 [compile]
-\- org.containers:container-samples-deps:jar:1.0.0 [compile]
+\- containers:container-samples-deps:jar:1.0.0 [compile]
 ```
 
 Requirements
