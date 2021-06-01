@@ -4,9 +4,11 @@ About
 This is Java Containers - my own version of slim jar technology allowing to successfully fight the problem of big size of uber jars.
 
 Recently a quite similar technology was implemented for Spring Boot applications (https://github.com/Akalu/spring-boot-thin-launcher). 
-This project was started having in mind  slightly different aims.
 
-I was inspired by layered docker images technology (https://dzone.com/articles/docker-layers-explained) used to make the distribution and running docker containers maximum fast and efficient, and I decided to apply similar approach but for Java application.
+My project was started having in mind  slightly different aims - I had a wish to create a general-purpose technology.
+I was inspired by layered docker images technology (https://dzone.com/articles/docker-layers-explained) used to make the distribution and running docker containers maximum fast and efficient, and I decided to apply similar approach but for Java application. Among other influences I can name Virtual Environment technology in Python world.
+
+The main idea is to separate business logic classes and application dependencies. All application's  dependencies are held in local storage which plays the role of cache, and instead of distribution of full jar with all dependencies only classes containing business logic are distributed.
 
 This technology has many potential applications. For example, the decreasing of jar size could shorten the spin up time for processes running in distributed system (such as Spark or Storm to name a few), in implementing engine for serverless platform and so on.
 
@@ -14,7 +16,7 @@ Overview
 =========
 
 The container could be bidden to the local maven repository, to Nexus or to the central maven repository.
-In either way the necessary artifacts are collected in local directory (by default this is a local-repo folder created in working directory)
+In either way the necessary artifacts are collected in local directory (by default this is a local-repo folder created in working directory, but can be overriden in configuration)
 
 Before executing jar in container, the following flow of system checks and operations is performed
 
