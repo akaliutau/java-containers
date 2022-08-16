@@ -3,7 +3,7 @@ About
 
 This is Java Containers - my own version of slim jar technology allowing to successfully fight the problem of big size of uber jars.
 
-Recently a quite similar technology was implemented for Spring Boot applications (https://github.com/Akalu/spring-boot-thin-launcher). 
+Recently a quite similar technology was implemented for Spring Boot applications (https://github.com/akaliutau/spring-boot-thin-launcher). 
 This project was started having in mind  slightly different aims.
 
 I was inspired by layered docker images technology (https://dzone.com/articles/docker-layers-explained) used to make the distribution and running docker containers maximum fast and efficient, and I decided to apply similar approach but for Java application.
